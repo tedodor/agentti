@@ -1,11 +1,14 @@
-from langchain_ollama import OllamaLLM
+from ollama import chat
 
 class LLM:
     def __init__(self):
-        self.llm = OllamaLLM(model="llama3.2")
+        self.model = "ministral-3"
 
     def inference(self, prompt):
-        answer = self.llm.invoke(prompt)
-        return answer
+        response = chat(
+            model=self.model,
+            messages=[{'role': 'user', 'content': prompt}],
+        )
+        return response.message.content
 
     

@@ -3,6 +3,10 @@ import prompts
 import signal
 import sys
 import time
+import logging
+import os
+
+log = logging.getLogger(__name__)
 
 class Agent:
     def __init__(self, local_mode=True):
@@ -14,7 +18,7 @@ class Agent:
 
     def get_user_input(self):
         signal.signal(signal.SIGALRM, self.timeout_handler)
-        signal.alarm(10)  # 10 second timeout
+        signal.alarm(3600)  # 10 second timeout
         try:
             user_input = input("You: ")
             if user_input.lower() in ["exit", "quit"]:
@@ -26,17 +30,24 @@ class Agent:
             signal.alarm(0)  # Always cancel the alarm
 
     def initiate_agent(self, initial_prompt=None):
-        prompt = initial_prompt if initial_prompt else prompts.INITIAL_PROMPT
+        initial_prompt = initial_prompt if initial_prompt else prompts.INITIAL_PROMPT
+        thoughts = ""
+        log.info("Starting agent")
+
         while True:
-            response = self.infer(prompt)
+            response = self.infer(initial_prompt + thoughts)
             print(response)
             user_input = self.get_user_input()
+
             if user_input:
-                prompt = f"{response}\nUser: {user_input}\nAgent:"
+                thoughts += f"{response}\nUser: <<{user_input}>>\nTHOUGHTS:"
             else:
-                prompt = f"{response}\nAgent: (No user input received, continuing...)"
+                thoughts += response
+                log.info("No user input received, continuing with model response")
             # sleep to not overwhelm the model with requests
-            time.sleep(1)
+            
+            os.system('clear')
+            print(thoughts)
 
 
 if __name__ == "__main__":
