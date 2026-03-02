@@ -1,7 +1,7 @@
-## Agentti
+# Agentti
 Simple agent with feedback mechanism
 
-# Running
+## Running
 To run:
 - Install ollama
 - Pull ministral-3
