@@ -34,23 +34,21 @@ class Agent:
             signal.alarm(0)  # Always cancel the alarm
 
     def initiate_agent(self, initial_prompt=None):
-        initial_prompt = initial_prompt if initial_prompt else prompts.INITIAL_PROMPT
+        system_prompt = initial_prompt if initial_prompt else prompts.INITIAL_PROMPT
+         
         thoughts = ""
-        log.info("Starting agent")
 
         while True:
-            response = self.infer(initial_prompt + thoughts)
-            print(response)
             user_input = self.get_user_input()
-
             if user_input:
-                thoughts += f"{response}\nUser: <<{user_input}>>\nTHOUGHTS:"
-            else:
-                thoughts += response
-                log.info("No user input received, continuing with model response")
+                thoughts += user_input + "\n"
 
+            print("Thinking...")
+            response = self.infer(thoughts, system_prompt=system_prompt)
+            thoughts += response + "\n"
             os.system('clear')
             print(thoughts)
+
 
 
 if __name__ == "__main__":
