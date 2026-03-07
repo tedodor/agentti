@@ -19,9 +19,11 @@ class Agent:
         
     def initiate_agent(self, initial_prompt=None):
         system_prompt = initial_prompt if initial_prompt else prompts.INITIAL_PROMPT
-         
-        thoughts = ""
+        skills_prompt = prompts.SKILLS_PROMPT.format(skills=self.skills.get_skill_descriptions())        
+        system_prompt += "\n" + skills_prompt
 
+        thoughts = ""
+        print(system_prompt)
         while True:
             user_input = self.get_user_input()
             if user_input:
