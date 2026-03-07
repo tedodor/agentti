@@ -51,7 +51,8 @@ class SkillsList:
         }
 
     def get_skill_descriptions(self) -> str:
-        return "\n".join([f"{skill.name}: {skill.description}" for skill in self.skills.values()])
+        return "\n".join([f"Skill name: {skill.name}, script name: {script_name}, description: {skill.description}" 
+                          for skill in self.skills.values() for script_name in skill.scripts.keys()])
     
     def get_skill(self, skill_name: str) -> Skill | None:
         return self.skills.get(skill_name, None)
