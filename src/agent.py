@@ -31,22 +31,28 @@ class Agent:
 
             print("Thinking...")
             response = self.infer(thoughts, system_prompt=system_prompt)
+
+            response = self.parse_response(response)
+
+            while response.startswith("CALL "):
+                thoughts += f"{results}\n"
+                results = self.parse_skill_call(response)
+                thoughts += f"Skill call result: {results}\n"
+                response = self.infer(thoughts, system_prompt=system_prompt)                
+
             thoughts += response + "\n"
             os.system('clear')
             print(thoughts)
-
-
+            
     def parse_skill_call(self, response: str):
-        lines = response.splitlines()
-        for line in lines:
-            if line.startswith("CALL "):
-                parts = line.split()
-                if len(parts) >= 4:
-                    skill_name = parts[1]
-                    script_name = parts[2]
-                    args = parts[3:]
-                    return skill_name, script_name, args
-        return None, None, None
+        parts = response.split()
+        if len(parts) >= 4:
+            skill_name = parts[1]
+            script_name = parts[2]
+            args = parts[3:]
+            return self.skills.run_skill_script(skill_name, script_name, *args)
+        else:
+            return "Error: Invalid CALL format. Expected: CALL <skill_name> <script_name> [args]"
 
 if __name__ == "__main__":
     agent = Agent(skills_dir="src/skills")

@@ -56,6 +56,15 @@ class SkillsList:
     
     def get_skill(self, skill_name: str) -> Skill | None:
         return self.skills.get(skill_name, None)
+    
+    def run_skill_script(self, skill_name: str, script_name: str, *args, **kwargs):
+        skill = self.get_skill(skill_name)
+        if not skill:
+            return "Error: Skill not found"
+        try:    
+            return skill.run_script(script_name, *args, **kwargs)
+        except Exception as e:
+            return f"Error running skill script: {str(e)}"
 
 
 if __name__ == "__main__":
