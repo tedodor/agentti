@@ -14,7 +14,7 @@ CALL <skill_name> <script_name> arg1 arg2
 
 Examples:
 CALL datetime get_datetime
-CALL weather get_weather --lat 0 --lon 0
+CALL weather get_weather 0 0
 
 After making a CALL, wait for the result. Once you receive the output, continue your response.
 """
