@@ -32,8 +32,6 @@ class Agent:
             print("Thinking...")
             response = self.infer(thoughts, system_prompt=system_prompt)
 
-            response = self.parse_response(response)
-
             while response.startswith("CALL "):
                 thoughts += f"{results}\n"
                 results = self.parse_skill_call(response)
