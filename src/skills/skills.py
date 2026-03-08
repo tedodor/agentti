@@ -61,7 +61,7 @@ class SkillsList:
         skill = self.get_skill(skill_name)
         if not skill:
             return "Error: Skill not found"
-        try:    
+        try:
             return skill.run_script(script_name, *args, **kwargs)
         except Exception as e:
             return f"Error running skill script: {str(e)}"

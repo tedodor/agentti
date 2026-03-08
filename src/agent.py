@@ -23,7 +23,6 @@ class Agent:
         system_prompt += "\n" + skills_prompt
 
         thoughts = ""
-        print(system_prompt)
         while True:
             user_input = self.get_user_input()
             if user_input:
@@ -31,9 +30,8 @@ class Agent:
 
             print("Thinking...")
             response = self.infer(thoughts, system_prompt=system_prompt)
-
             while response.startswith("CALL "):
-                thoughts += f"{results}\n"
+                thoughts += f"{response}\n"
                 results = self.parse_skill_call(response)
                 thoughts += f"Skill call result: {results}\n"
                 response = self.infer(thoughts, system_prompt=system_prompt)                
@@ -49,9 +47,13 @@ class Agent:
             script_name = parts[2]
             args = parts[3:]
             return self.skills.run_skill_script(skill_name, script_name, *args)
+        elif len(parts) == 3:
+            skill_name = parts[1]
+            script_name = parts[2]
+            return self.skills.run_skill_script(skill_name, script_name)
         else:
             return "Error: Invalid CALL format. Expected: CALL <skill_name> <script_name> [args]"
 
 if __name__ == "__main__":
-    agent = Agent(skills_dir="src/skills")
+    agent = Agent(skills_dir='/home/teodor/Program/agentti/skills')
     agent.initiate_agent(prompts.INITIAL_PROMPT)
