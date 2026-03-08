@@ -6,4 +6,6 @@ SKILLS_PROMPT = """The following skills are available to you:
 {skills}
 You can use these skills by calling them with the syntax: 
 CALL <skill_name> <script_name> <args>
+
+Use the skills to help you answer the user's questions and solve problems. 
 """
